@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aksh Mittal | Full-Stack Developer & UI/UX Architect</title>
+    <title>Aksh | Personal Portfolio - FELIX.AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,12 +18,10 @@
                         brand: {
                             black: '#0a0a0c',
                             dark: '#121115',
-                            card: '#18161e',
-                            cardLight: '#23202b',
+                            card: '#1a181e',
                             orange: '#ff5e00',
                             red: '#e63946',
                             fire: '#ff2a00',
-                            gold: '#ffaa00'
                         }
                     },
                     fontFamily: {
@@ -34,6 +32,7 @@
                         'glow': 'glow 3s ease-in-out infinite alternate',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'blink': 'blink 1s step-end infinite',
                     },
                     keyframes: {
                         glow: {
@@ -43,6 +42,10 @@
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-10px)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0' },
                         }
                     }
                 }
@@ -73,54 +76,169 @@
 
         /* Gradient Text Helper */
         .text-gradient {
-            background: linear-gradient(135deg, #ffaa00 0%, #ff5e00 45%, #e63946 100%);
+            background: linear-gradient(135deg, #ff8c00 0%, #ff5e00 40%, #e63946 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
-        /* Glassmorphism Effect */
+        /* Glassmorphism Effect & Mouse Spotlight */
         .glass-panel {
-            background: rgba(22, 20, 26, 0.65);
+            background: rgba(26, 24, 30, 0.65);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
         }
 
-        .glass-panel-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-panel-hover:hover {
-            background: rgba(30, 26, 36, 0.85);
-            border-color: rgba(255, 94, 0, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 16px 32px -10px rgba(255, 94, 0, 0.18);
+        .spotlight-card {
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+            transform-style: preserve-3d;
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Mouse Spotlight Effect */
-        #spotlight {
-            background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), rgba(255, 94, 0, 0.06), transparent 80%);
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(
+                500px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 94, 0, 0.14),
+                transparent 45%
+            );
+            opacity: 0;
+            transition: opacity 0.35s ease;
             pointer-events: none;
+            z-index: 1;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-panel-hover:hover {
+            background: rgba(32, 28, 38, 0.85);
+            border-color: rgba(255, 94, 0, 0.45);
+            box-shadow: 0 16px 35px -10px rgba(255, 94, 0, 0.22);
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal.reveal-left {
+            transform: translateX(-32px);
+        }
+
+        .reveal.reveal-right {
+            transform: translateX(32px);
+        }
+
+        .reveal.reveal-scale {
+            transform: scale(0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+        }
+
+        /* Animated Skill Progress Bars */
+        .skill-fill {
+            width: 0%;
+            transition: width 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Project Card Filter Transitions */
+        .project-card {
+            transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card.filtering-out {
+            opacity: 0;
+            transform: scale(0.92) translateY(10px);
+            pointer-events: none;
+        }
+
+        /* Ripple Micro-interaction */
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            transform: scale(0);
+            animation: ripple-anim 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Modal & Mobile Menu Smooth Transitions */
+        .modal-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: scale(0.93) translateY(16px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+        }
+        .modal-backdrop.open .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* Desktop Ambient Cursor Glow */
+        #cursorGlow {
+            position: fixed;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 94, 0, 0.09) 0%, rgba(230, 57, 70, 0.04) 40%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: opacity 0.4s ease;
         }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-brand-orange selection:text-white relative min-h-screen">
+<body class="font-sans antialiased selection:bg-brand-orange selection:text-white relative">
 
-    <!-- Scroll Progress Indicator -->
-    <div id="scrollProgress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-brand-orange via-brand-red to-brand-gold z-[60] w-0 transition-all duration-75"></div>
+    <!-- 1. Top Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 right-0 h-1 z-[60] bg-white/5 pointer-events-none">
+        <div id="scrollProgressBar" class="h-full w-0 bg-gradient-to-r from-brand-orange via-brand-fire to-brand-red shadow-[0_0_12px_rgba(255,94,0,0.8)] transition-[width] duration-75 ease-out"></div>
+    </div>
 
-    <!-- Mouse Torch Overlay -->
-    <div id="spotlight" class="fixed inset-0 z-0"></div>
+    <!-- Desktop Custom Subtle Cursor Glow -->
+    <div id="cursorGlow" class="hidden lg:block opacity-0"></div>
 
-    <!-- Ambient Glowing Orbs -->
-    <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-orange/15 rounded-full blur-[140px] pointer-events-none z-0 animate-pulse-slow"></div>
-    <div class="fixed bottom-1/3 right-10 w-96 h-96 bg-brand-red/15 rounded-full blur-[150px] pointer-events-none z-0 animate-pulse-slow" style="animation-delay: 2s;"></div>
-    <div class="fixed top-2/3 left-10 w-80 h-80 bg-brand-fire/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <!-- Ambient Background Glows -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-orange/15 rounded-full blur-[120px] pointer-events-none z-0 animate-pulse-slow"></div>
+    <div class="fixed bottom-1/3 right-10 w-96 h-96 bg-brand-red/15 rounded-full blur-[140px] pointer-events-none z-0 animate-pulse-slow" style="animation-delay: 2s;"></div>
+    <div class="fixed top-2/3 left-10 w-80 h-80 bg-brand-fire/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
     <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4 transition-all duration-300" id="navbar">
-        <nav class="max-w-6xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between border-white/10 shadow-2xl">
+    <header id="mainHeader" class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4 transition-all duration-300">
+        <nav id="mainNav" class="max-w-6xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between border-white/10 shadow-2xl transition-all duration-300">
             <a href="#hero" class="flex items-center gap-2 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-brand-orange flex items-center justify-center font-mono font-bold text-lg text-white shadow-lg shadow-brand-orange/30 group-hover:scale-105 transition-transform">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-brand-orange flex items-center justify-center font-mono font-bold text-lg text-white shadow-lg shadow-brand-orange/30 group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
                     &lt;/&gt;
                 </div>
                 <span class="font-bold text-xl tracking-tight text-white group-hover:text-brand-orange transition-colors">
@@ -129,34 +247,37 @@
             </a>
 
             <div class="hidden md:flex items-center gap-8 font-mono text-sm tracking-wide text-gray-300">
-                <a href="#about" class="hover:text-brand-orange transition-colors py-1 nav-link">// About</a>
-                <a href="#skills" class="hover:text-brand-orange transition-colors py-1 nav-link">// Skills</a>
-                <a href="#projects" class="hover:text-brand-orange transition-colors py-1 nav-link">// Projects</a>
-                <a href="#experience" class="hover:text-brand-orange transition-colors py-1 nav-link">// Experience</a>
+                <a href="#about" class="nav-link hover:text-brand-orange transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange after:transition-all hover:after:w-full">// About</a>
+                <a href="#skills" class="nav-link hover:text-brand-orange transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange after:transition-all hover:after:w-full">// Skills</a>
+                <a href="#projects" class="nav-link hover:text-brand-orange transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange after:transition-all hover:after:w-full">// Projects</a>
+                <a href="#experience" class="nav-link hover:text-brand-orange transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange after:transition-all hover:after:w-full">// Experience</a>
             </div>
 
             <div class="flex items-center gap-4">
-                <button onclick="openContactModal()" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-brand-orange to-brand-red hover:from-brand-red hover:to-brand-orange shadow-lg shadow-brand-orange/25 hover:shadow-brand-red/40 hover:scale-[1.02] active:scale-95 transition-all">
+                <button onclick="openContactModal()" class="btn-ripple magnetic-btn hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-brand-orange to-brand-red hover:from-brand-red hover:to-brand-orange shadow-lg shadow-brand-orange/25 hover:shadow-brand-red/40 hover:scale-[1.03] active:scale-95 transition-all">
                     <span>Let's Talk</span>
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
 
-                <button id="mobileMenuBtn" aria-label="Toggle menu" class="md:hidden p-2 text-gray-300 hover:text-white rounded-lg focus:outline-none">
-                    <i data-lucide="menu" id="menuIcon" class="w-6 h-6"></i>
+                <button id="mobileMenuBtn" aria-label="Toggle Menu" class="md:hidden p-2 text-gray-300 hover:text-white rounded-lg focus:outline-none transition-transform active:scale-90">
+                    <i id="menuIconOpen" data-lucide="menu" class="w-6 h-6 transition-transform duration-300"></i>
+                    <i id="menuIconClose" data-lucide="x" class="w-6 h-6 hidden transition-transform duration-300"></i>
                 </button>
             </div>
         </nav>
 
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobileMenu" class="hidden md:hidden max-w-6xl mx-auto mt-2 glass-panel rounded-2xl p-6 flex flex-col gap-4 border-white/10 shadow-2xl">
-            <a href="#about" class="mobile-nav-link text-gray-300 hover:text-brand-orange py-2 font-mono text-sm border-b border-white/5">// About</a>
-            <a href="#skills" class="mobile-nav-link text-gray-300 hover:text-brand-orange py-2 font-mono text-sm border-b border-white/5">// Skills</a>
-            <a href="#projects" class="mobile-nav-link text-gray-300 hover:text-brand-orange py-2 font-mono text-sm border-b border-white/5">// Projects</a>
-            <a href="#experience" class="mobile-nav-link text-gray-300 hover:text-brand-orange py-2 font-mono text-sm border-b border-white/5">// Experience</a>
-            <button onclick="openContactModal(); toggleMobileMenu();" class="w-full mt-2 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-brand-orange to-brand-red">
-                <span>Let's Talk</span>
-                <i data-lucide="send" class="w-4 h-4"></i>
-            </button>
+        <!-- Mobile Menu with Smooth Accordion Transition -->
+        <div id="mobileMenu" class="md:hidden max-w-6xl mx-auto mt-2 overflow-hidden transition-all duration-300 ease-out max-h-0 opacity-0 pointer-events-none">
+            <div class="glass-panel rounded-2xl p-6 flex flex-col gap-4 border-white/10 shadow-2xl">
+                <a href="#about" class="mobile-nav-link text-gray-300 hover:text-brand-orange hover:translate-x-1 transition-all py-2 font-mono text-sm">// About</a>
+                <a href="#skills" class="mobile-nav-link text-gray-300 hover:text-brand-orange hover:translate-x-1 transition-all py-2 font-mono text-sm">// Skills</a>
+                <a href="#projects" class="mobile-nav-link text-gray-300 hover:text-brand-orange hover:translate-x-1 transition-all py-2 font-mono text-sm">// Projects</a>
+                <a href="#experience" class="mobile-nav-link text-gray-300 hover:text-brand-orange hover:translate-x-1 transition-all py-2 font-mono text-sm">// Experience</a>
+                <button onclick="openContactModal(); toggleMobileMenu(false);" class="btn-ripple w-full mt-2 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-brand-orange to-brand-red">
+                    <span>Let's Talk</span>
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -164,7 +285,7 @@
     <section id="hero" class="min-h-screen pt-32 pb-20 px-4 sm:px-6 flex items-center justify-center relative z-10">
         <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            <div class="lg:col-span-7 flex flex-col items-start gap-6 text-left">
+            <div class="lg:col-span-7 flex flex-col items-start gap-6 text-left reveal reveal-left active">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-brand-orange/30 text-xs font-mono text-brand-orange">
                     <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
                     <span>Available for Freelance & Full-time Roles</span>
@@ -175,50 +296,927 @@
                     <span class="text-gradient">Digital Experiences.</span>
                 </h1>
 
-                <p class="text-lg sm:text-xl text-gray-400 max-w-2xl font-light leading-relaxed">
-                    I'm <span class="text-white font-semibold">Aksh</span>, a Full-Stack Developer & UI/UX Architect specializing in building modern, performant, and visual web applications with cutting-edge tech.
-                </p>
+                <!-- 3. Dynamic Role Typing Subtitle -->
+                <div class="text-lg sm:text-xl text-gray-400 max-w-2xl font-light leading-relaxed">
+                    I'm <span class="text-white font-semibold">Aksh</span>, a 
+                    <span class="inline-flex items-center font-mono font-semibold text-brand-orange bg-brand-orange/10 border border-brand-orange/25 px-2.5 py-0.5 rounded-lg">
+                        <span id="typedRole">Full-Stack Developer</span>
+                        <span class="w-0.5 h-5 bg-brand-orange ml-1 animate-blink"></span>
+                    </span>
+                    specializing in building modern, performant, and visual web applications with cutting-edge tech.
+                </div>
 
                 <div class="flex flex-wrap gap-4 pt-2">
-                    <a href="#projects" class="px-7 py-3.5 rounded-xl font-medium text-white bg-gradient-to-r from-brand-orange to-brand-red hover:shadow-xl hover:shadow-brand-orange/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
+                    <a href="#projects" class="btn-ripple magnetic-btn px-7 py-3.5 rounded-xl font-medium text-white bg-gradient-to-r from-brand-orange to-brand-red hover:shadow-xl hover:shadow-brand-orange/25 hover:scale-[1.03] active:scale-95 transition-all flex items-center gap-2 group">
                         <span>View Work</span>
-                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
                     </a>
-                    <button onclick="openContactModal()" class="px-7 py-3.5 rounded-xl font-medium text-gray-300 glass-panel hover:text-white hover:border-brand-orange/50 hover:bg-white/5 active:scale-95 transition-all flex items-center gap-2">
+                    <button onclick="openContactModal()" class="btn-ripple magnetic-btn px-7 py-3.5 rounded-xl font-medium text-gray-300 glass-panel hover:text-white hover:border-brand-orange/50 hover:bg-white/5 active:scale-95 transition-all flex items-center gap-2">
                         <span>Get In Touch</span>
-                    </button>
-                    <button onclick="copyEmail()" class="px-4 py-3.5 rounded-xl text-gray-400 glass-panel hover:text-brand-orange hover:border-brand-orange/50 transition-all" title="Copy Email">
-                        <i data-lucide="copy" class="w-5 h-5"></i>
                     </button>
                 </div>
 
                 <div class="flex items-center gap-6 pt-6 border-t border-white/10 w-full">
-                    <span class="text-xs font-mono text-gray-500 uppercase tracking-wider">Connect:</span>
+                    <span class="text-xs font-mono text-gray-500 uppercase tracking-wider">Connect With Me:</span>
                     <div class="flex items-center gap-4">
-                        <a href="mailto:2211akshmittal@gmail.com" title="Email Me" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 transition-all">
+                        <a href="mailto:2211akshmittal@gmail.com" title="Email Me" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 hover:-translate-y-1 transition-all">
                             <i data-lucide="mail" class="w-5 h-5"></i>
                         </a>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 transition-all">
+                        <a href="https://github.com/2211akshmittal-del" target="_blank" rel="noopener noreferrer" title="GitHub" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 hover:-translate-y-1 transition-all">
                             <i data-lucide="github" class="w-5 h-5"></i>
                         </a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 transition-all">
+                        <a href="#" title="LinkedIn" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 hover:-translate-y-1 transition-all">
                             <i data-lucide="linkedin" class="w-5 h-5"></i>
                         </a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 transition-all">
+                        <a href="#" title="Twitter / X" class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-gray-400 hover:text-brand-orange hover:border-brand-orange/50 hover:-translate-y-1 transition-all">
                             <i data-lucide="twitter" class="w-5 h-5"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Profile Avatar Card -->
-            <div class="lg:col-span-5 flex justify-center">
-                <div class="relative w-full max-w-md">
+            <!-- Profile Avatar Card with 3D Tilt & Floating Animation -->
+            <div class="lg:col-span-5 flex justify-center reveal reveal-right active" style="transition-delay: 150ms;">
+                <div class="relative w-full max-w-md animate-float">
                     <div class="absolute -inset-1 bg-gradient-to-r from-brand-orange to-brand-red rounded-3xl blur-xl opacity-40 animate-pulse-slow"></div>
                     
-                    <div class="relative glass-panel rounded-3xl p-6 border-white/10 shadow-2xl flex flex-col items-center">
-                        <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 group border border-white/10 bg-brand-card">
-                            <!-- Safe fallback image logic included via onerror -->
-                            <img src="https://lh3.googleusercontent.com/u/0/d/1BWuxUrRvYYdkH5lf_Y19iWLV4oUpJBT-" 
-                                 onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'"
-                                 alt="Aksh Mittal
+                    <div class="relative glass-panel spotlight-card tilt-card rounded-3xl p-6 border-white/10 shadow-2xl flex flex-col items-center">
+                        <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 group border border-white/10">
+                            <!-- Direct Google Drive Profile Image -->
+                            <img src="https://lh3.googleusercontent.com/u/0/d/1BWuxUrRvYYdkH5lf_Y19iWLV4oUpJBT-" alt="Aksh" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80"></div>
+                            
+                            <div class="absolute bottom-4 left-4 right-4 p-3 glass-panel rounded-xl border-white/10 flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-mono text-brand-orange">LOCATION</p>
+                                    <p class="text-sm font-semibold text-white">India, Delhi</p>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-brand-orange/20 text-brand-orange flex items-center justify-center">
+                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 w-full text-center">
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-brand-orange/30 transition-colors">
+                                <h3 class="text-xl font-bold text-white font-mono counter" data-target="2" data-suffix="+">2+</h3>
+                                <p class="text-xs text-gray-400">Years Exp.</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-brand-orange/30 transition-colors">
+                                <h3 class="text-xl font-bold text-white font-mono counter" data-target="10" data-suffix="+">10+</h3>
+                                <p class="text-xs text-gray-400">Projects</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-brand-orange/30 transition-colors">
+                                <h3 class="text-xl font-bold text-white font-mono counter" data-target="100" data-suffix="%">100%</h3>
+                                <p class="text-xs text-gray-400">Satisfaction</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-4 sm:px-6 relative z-10 border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col items-center mb-16 text-center reveal">
+                <span class="text-xs font-mono text-brand-orange tracking-widest uppercase mb-2">// WHO I AM</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-white">About <span class="text-gradient">Me</span></h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-orange to-brand-red rounded-full mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <div class="glass-panel spotlight-card p-8 rounded-3xl border-white/10 flex flex-col justify-between reveal reveal-left">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Passionate Software Developer & Design Enthusiast</h3>
+                        <p class="text-gray-300 leading-relaxed mb-4">
+                            Hello! I'm Aksh, a creative developer with a passion for building fast, intuitive, and visually captivating digital products. My journey began with tinkering with simple HTML templates and evolved into architecting complex full-stack cloud applications.
+                        </p>
+                        <p class="text-gray-400 leading-relaxed">
+                            I bridge the gap between design and development, ensuring that every interface not only looks stunning with modern aesthetics but also delivers exceptional user experience and top-tier performance.
+                        </p>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-orange"></i>
+                            <span>Clean Architecture</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-orange"></i>
+                            <span>Responsive & Accessible</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-orange"></i>
+                            <span>Performance Optimized</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="glass-panel spotlight-card tilt-card glass-panel-hover p-6 rounded-2xl border-white/10 flex flex-col justify-between reveal" style="transition-delay: 80ms;">
+                        <div class="w-12 h-12 rounded-xl bg-brand-orange/10 text-brand-orange flex items-center justify-center mb-4">
+                            <i data-lucide="code-2" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white mb-1">Frontend Design</h4>
+                            <p class="text-xs text-gray-400">Crafting sleek interfaces using React, Vue, Tailwind, & Next.js.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel spotlight-card tilt-card glass-panel-hover p-6 rounded-2xl border-white/10 flex flex-col justify-between reveal" style="transition-delay: 160ms;">
+                        <div class="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center mb-4">
+                            <i data-lucide="server" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white mb-1">Backend Engineering</h4>
+                            <p class="text-xs text-gray-400">Building scalable APIs with Node.js, Python, & Postgres.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel spotlight-card tilt-card glass-panel-hover p-6 rounded-2xl border-white/10 flex flex-col justify-between reveal" style="transition-delay: 240ms;">
+                        <div class="w-12 h-12 rounded-xl bg-brand-orange/10 text-brand-orange flex items-center justify-center mb-4">
+                            <i data-lucide="sparkles" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white mb-1">UI/UX Craft</h4>
+                            <p class="text-xs text-gray-400">Designing modern user journeys with Figma & interactive prototypes.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel spotlight-card tilt-card glass-panel-hover p-6 rounded-2xl border-white/10 flex flex-col justify-between reveal" style="transition-delay: 320ms;">
+                        <div class="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center mb-4">
+                            <i data-lucide="zap" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white mb-1">Speed & SEO</h4>
+                            <p class="text-xs text-gray-400">Ensuring lightning-fast loads and search engine visibility.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section with Scroll-Triggered Progress Bars -->
+    <section id="skills" class="py-24 px-4 sm:px-6 relative z-10 border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col items-center mb-16 text-center reveal">
+                <span class="text-xs font-mono text-brand-orange tracking-widest uppercase mb-2">// TECHNICAL PROFICIENCY</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-white">Skills & <span class="text-gradient">Tech Stack</span></h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-orange to-brand-red rounded-full mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div id="skillBarsContainer" class="glass-panel spotlight-card p-8 rounded-3xl border-white/10 reveal reveal-left">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i data-lucide="terminal" class="text-brand-orange w-5 h-5"></i>
+                        Core Technical Skills
+                    </h3>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-sm font-mono mb-2">
+                                <span class="text-gray-300">JavaScript / TypeScript</span>
+                                <span class="text-brand-orange">95%</span>
+                            </div>
+                            <div class="w-full h-2.5 rounded-full bg-white/5 overflow-hidden p-0.5 border border-white/5">
+                                <div class="skill-fill h-full bg-gradient-to-r from-brand-orange to-brand-red rounded-full" data-width="95%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm font-mono mb-2">
+                                <span class="text-gray-300">React / Next.js / Vue</span>
+                                <span class="text-brand-orange">90%</span>
+                            </div>
+                            <div class="w-full h-2.5 rounded-full bg-white/5 overflow-hidden p-0.5 border border-white/5">
+                                <div class="skill-fill h-full bg-gradient-to-r from-brand-orange to-brand-red rounded-full" data-width="90%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm font-mono mb-2">
+                                <span class="text-gray-300">Tailwind CSS / HTML5 / CSS3</span>
+                                <span class="text-brand-orange">98%</span>
+                            </div>
+                            <div class="w-full h-2.5 rounded-full bg-white/5 overflow-hidden p-0.5 border border-white/5">
+                                <div class="skill-fill h-full bg-gradient-to-r from-brand-orange to-brand-red rounded-full" data-width="98%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm font-mono mb-2">
+                                <span class="text-gray-300">Node.js / Express / Python</span>
+                                <span class="text-brand-orange">85%</span>
+                            </div>
+                            <div class="w-full h-2.5 rounded-full bg-white/5 overflow-hidden p-0.5 border border-white/5">
+                                <div class="skill-fill h-full bg-gradient-to-r from-brand-orange to-brand-red rounded-full" data-width="85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm font-mono mb-2">
+                                <span class="text-gray-300">PostgreSQL / MongoDB / Redis</span>
+                                <span class="text-brand-orange">80%</span>
+                            </div>
+                            <div class="w-full h-2.5 rounded-full bg-white/5 overflow-hidden p-0.5 border border-white/5">
+                                <div class="skill-fill h-full bg-gradient-to-r from-brand-orange to-brand-red rounded-full" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-6 reveal reveal-right" style="transition-delay: 120ms;">
+                    <div class="glass-panel spotlight-card p-8 rounded-3xl border-white/10">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="layers" class="text-brand-red w-5 h-5"></i>
+                            Frameworks & Ecosystem
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">React.js</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Next.js</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Vue.js</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">TailwindCSS</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Node.js</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Express</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">GraphQL</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">REST APIs</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-orange/60 hover:bg-brand-orange/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Prisma ORM</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel spotlight-card p-8 rounded-3xl border-white/10">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="wrench" class="text-brand-orange w-5 h-5"></i>
+                            Tools & DevOps
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-red/60 hover:bg-brand-red/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Git & GitHub</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-red/60 hover:bg-brand-red/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Docker</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-red/60 hover:bg-brand-red/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Figma</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-red/60 hover:bg-brand-red/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Vercel</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-red/60 hover:bg-brand-red/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">AWS</span>
+                            <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 font-mono hover:border-brand-red/60 hover:bg-brand-red/10 hover:text-white hover:-translate-y-0.5 transition-all cursor-default">Jest / Cypress</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section with Interactive Category Filters & Case Study Modal -->
+    <section id="projects" class="py-24 px-4 sm:px-6 relative z-10 border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col items-center mb-10 text-center reveal">
+                <span class="text-xs font-mono text-brand-orange tracking-widest uppercase mb-2">// FEATURED WORK</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-white">Recent <span class="text-gradient">Projects</span></h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-orange to-brand-red rounded-full mt-4"></div>
+            </div>
+
+            <!-- 5. Project Category Filter Tabs -->
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12 reveal" style="transition-delay: 100ms;">
+                <button data-filter="all" class="filter-tab active px-5 py-2.5 rounded-xl font-mono text-xs sm:text-sm transition-all bg-gradient-to-r from-brand-orange to-brand-red text-white shadow-lg shadow-brand-orange/25">
+                    All Projects
+                </button>
+                <button data-filter="ai" class="filter-tab px-5 py-2.5 rounded-xl font-mono text-xs sm:text-sm glass-panel text-gray-300 hover:text-white hover:border-brand-orange/50 transition-all">
+                    AI & Agents
+                </button>
+                <button data-filter="web" class="filter-tab px-5 py-2.5 rounded-xl font-mono text-xs sm:text-sm glass-panel text-gray-300 hover:text-white hover:border-brand-orange/50 transition-all">
+                    Web & Full-Stack
+                </button>
+                <button data-filter="opensource" class="filter-tab px-5 py-2.5 rounded-xl font-mono text-xs sm:text-sm glass-panel text-gray-300 hover:text-white hover:border-brand-orange/50 transition-all">
+                    Open Source
+                </button>
+            </div>
+
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project 1 -->
+                <div data-category="ai web" class="project-card glass-panel spotlight-card tilt-card glass-panel-hover rounded-3xl overflow-hidden border-white/10 flex flex-col group reveal" style="transition-delay: 100ms;">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1cNOOP6-YLLYNLJaJdMHD8AreXUK6RR-w" alt="Felix Ai" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/40 to-transparent"></div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-mono glass-panel text-brand-orange border-brand-orange/30">Node.js & Web3</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between relative z-10">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-orange transition-colors">Felix Ai</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">A thoughtful AI companion for the questions, ideas, and everyday challenges you want to move forward.</p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between gap-2">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono text-gray-500">#React</span>
+                                <span class="text-xs font-mono text-gray-500">#Tailwind</span>
+                                <span class="text-xs font-mono text-gray-500">#Node</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openProjectModal('felix-ai')" title="Case Study & Preview" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-orange/40 text-xs font-mono text-gray-200 transition-all flex items-center gap-1.5">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-orange"></i>
+                                    <span>Details</span>
+                                </button>
+                                <a href="https://2211felix.pythonanywhere.com" target="_blank" rel="noopener noreferrer" title="Live Demo" class="p-2 rounded-lg bg-white/5 hover:bg-brand-orange hover:text-white text-gray-300 transition-all">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div data-category="opensource web" class="project-card glass-panel spotlight-card tilt-card glass-panel-hover rounded-3xl overflow-hidden border-white/10 flex flex-col group reveal" style="transition-delay: 200ms;">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1GkfQX2lQnSJNi90n-xctzqwSBAgJjwdt" alt="Github Profile" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/40 to-transparent"></div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-mono glass-panel text-brand-red border-brand-red/30">Github</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between relative z-10">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-orange transition-colors">Github Profile</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">My central hub for open-source work, full-stack projects, and continuous learning. Explore repository source code, live demos, and dynamic contribution activity.</p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between gap-2">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono text-gray-500">#GitHub</span>
+                                <span class="text-xs font-mono text-gray-500">#DeveloperTools</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openProjectModal('github-profile')" title="Case Study & Preview" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-orange/40 text-xs font-mono text-gray-200 transition-all flex items-center gap-1.5">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-orange"></i>
+                                    <span>Details</span>
+                                </button>
+                                <a href="https://github.com/2211akshmittal-del" target="_blank" rel="noopener noreferrer" title="Open GitHub" class="p-2 rounded-lg bg-white/5 hover:bg-brand-orange hover:text-white text-gray-300 transition-all">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div data-category="ai web" class="project-card glass-panel spotlight-card tilt-card glass-panel-hover rounded-3xl overflow-hidden border-white/10 flex flex-col group reveal" style="transition-delay: 300ms;">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/1w7nk-ngpRebrmBJIV19VHX7AA6ywFKLi" alt="Felix // OS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/40 to-transparent"></div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-mono glass-panel text-brand-orange border-brand-orange/30">Python & Vue</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between relative z-10">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-orange transition-colors">Felix // OS</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">AI-powered workflow tool with smart summary generators, document indexing, and natural language query support.</p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between gap-2">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono text-gray-500">#Vue3</span>
+                                <span class="text-xs font-mono text-gray-500">#FastAPI</span>
+                                <span class="text-xs font-mono text-gray-500">#Gemini</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openProjectModal('felix-os')" title="Case Study & Preview" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-orange/40 text-xs font-mono text-gray-200 transition-all flex items-center gap-1.5">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-orange"></i>
+                                    <span>Details</span>
+                                </button>
+                                <a href="https://felix-os-one.vercel.app/" target="_blank" rel="noopener noreferrer" title="Live Demo" class="p-2 rounded-lg bg-white/5 hover:bg-brand-orange hover:text-white text-gray-300 transition-all">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Interactive Experience & Education Timeline Section -->
+    <section id="experience" class="py-24 px-4 sm:px-6 relative z-10 border-t border-white/5">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col items-center mb-16 text-center reveal">
+                <span class="text-xs font-mono text-brand-orange tracking-widest uppercase mb-2">// JOURNEY & MILESTONES</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-white">Experience & <span class="text-gradient">Timeline</span></h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-orange to-brand-red rounded-full mt-4"></div>
+            </div>
+
+            <div id="timelineContainer" class="relative pl-8 sm:pl-0">
+                <!-- Background Vertical Track -->
+                <div class="absolute left-3.5 sm:left-1/2 top-0 bottom-0 w-0.5 bg-white/10 sm:-translate-x-1/2"></div>
+                <!-- Animated Scroll Progress Vertical Line -->
+                <div id="timelineProgressLine" class="absolute left-3.5 sm:left-1/2 top-0 w-0.5 h-0 bg-gradient-to-b from-brand-orange via-brand-fire to-brand-red sm:-translate-x-1/2 shadow-[0_0_12px_rgba(255,94,0,0.8)] transition-all duration-150"></div>
+
+                <div class="space-y-12">
+                    <!-- Milestone 1 -->
+                    <div class="relative flex flex-col sm:flex-row items-start sm:items-center justify-between reveal">
+                        <div class="sm:w-[45%] sm:text-right sm:pr-8 order-2 sm:order-1 w-full">
+                            <div onclick="toggleTimelineCard(this)" class="cursor-pointer glass-panel spotlight-card glass-panel-hover p-6 rounded-2xl border-white/10 text-left sm:text-right group">
+                                <div class="flex items-center justify-between sm:justify-end gap-2 mb-2">
+                                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-brand-orange/15 text-brand-orange border border-brand-orange/30">2025 — Present</span>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 group-hover:text-brand-orange transition-transform duration-300 timeline-chevron"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white group-hover:text-brand-orange transition-colors">Founder & Lead AI Engineer</h3>
+                                <p class="text-sm font-mono text-gray-400 mb-2">FELIX.AI & Felix // OS</p>
+                                <p class="text-sm text-gray-300 leading-relaxed">
+                                    Architecting intelligent web applications, conversational AI assistants, and document indexing workspaces powered by modern LLMs.
+                                </p>
+                                <div class="timeline-extra overflow-hidden max-h-0 opacity-0 transition-all duration-300">
+                                    <div class="pt-4 mt-4 border-t border-white/10 text-xs text-gray-400 space-y-1.5">
+                                        <p>• Engineered low-latency streaming interfaces with Vue 3, React, and FastAPI.</p>
+                                        <p>• Built semantic search & multi-document summarization workflows.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute left-[-25px] sm:static sm:w-[10%] flex justify-center order-1 sm:order-2 my-2 sm:my-0">
+                            <div class="w-5 h-5 rounded-full bg-brand-black border-4 border-brand-orange shadow-[0_0_15px_rgba(255,94,0,0.8)] z-10"></div>
+                        </div>
+                        <div class="hidden sm:block sm:w-[45%] order-3"></div>
+                    </div>
+
+                    <!-- Milestone 2 -->
+                    <div class="relative flex flex-col sm:flex-row items-start sm:items-center justify-between reveal" style="transition-delay: 120ms;">
+                        <div class="hidden sm:block sm:w-[45%] order-1"></div>
+                        <div class="absolute left-[-25px] sm:static sm:w-[10%] flex justify-center order-1 sm:order-2 my-2 sm:my-0">
+                            <div class="w-5 h-5 rounded-full bg-brand-black border-4 border-brand-red shadow-[0_0_15px_rgba(230,57,70,0.8)] z-10"></div>
+                        </div>
+                        <div class="sm:w-[45%] sm:pl-8 order-2 sm:order-3 w-full">
+                            <div onclick="toggleTimelineCard(this)" class="cursor-pointer glass-panel spotlight-card glass-panel-hover p-6 rounded-2xl border-white/10 text-left group">
+                                <div class="flex items-center justify-between gap-2 mb-2">
+                                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-brand-red/15 text-brand-red border border-brand-red/30">2024 — 2025</span>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 group-hover:text-brand-red transition-transform duration-300 timeline-chevron"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white group-hover:text-brand-red transition-colors">Full-Stack Web Developer</h3>
+                                <p class="text-sm font-mono text-gray-400 mb-2">Freelance & Open Source • Delhi, India</p>
+                                <p class="text-sm text-gray-300 leading-relaxed">
+                                    Delivered 10+ responsive web platforms, interactive dashboards, and scalable REST/GraphQL backends with 100% client satisfaction.
+                                </p>
+                                <div class="timeline-extra overflow-hidden max-h-0 opacity-0 transition-all duration-300">
+                                    <div class="pt-4 mt-4 border-t border-white/10 text-xs text-gray-400 space-y-1.5">
+                                        <p>• Specialized in Next.js, Tailwind CSS, Node.js, and PostgreSQL optimization.</p>
+                                        <p>• Reduced page load times by up to 45% through code-splitting and edge caching.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 3 -->
+                    <div class="relative flex flex-col sm:flex-row items-start sm:items-center justify-between reveal" style="transition-delay: 240ms;">
+                        <div class="sm:w-[45%] sm:text-right sm:pr-8 order-2 sm:order-1 w-full">
+                            <div onclick="toggleTimelineCard(this)" class="cursor-pointer glass-panel spotlight-card glass-panel-hover p-6 rounded-2xl border-white/10 text-left sm:text-right group">
+                                <div class="flex items-center justify-between sm:justify-end gap-2 mb-2">
+                                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-brand-orange/15 text-brand-orange border border-brand-orange/30">2023 — 2024</span>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 group-hover:text-brand-orange transition-transform duration-300 timeline-chevron"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white group-hover:text-brand-orange transition-colors">UI/UX & Frontend Architect</h3>
+                                <p class="text-sm font-mono text-gray-400 mb-2">Design Systems & Interactive Prototypes</p>
+                                <p class="text-sm text-gray-300 leading-relaxed">
+                                    Focused on human-centered design systems, glassmorphism aesthetics, micro-interactions, and accessible component libraries.
+                                </p>
+                                <div class="timeline-extra overflow-hidden max-h-0 opacity-0 transition-all duration-300">
+                                    <div class="pt-4 mt-4 border-t border-white/10 text-xs text-gray-400 space-y-1.5">
+                                        <p>• Translated complex Figma wireframes into reusable React and Vue component kits.</p>
+                                        <p>• Click any timeline card to expand or collapse milestone highlights.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute left-[-25px] sm:static sm:w-[10%] flex justify-center order-1 sm:order-2 my-2 sm:my-0">
+                            <div class="w-5 h-5 rounded-full bg-brand-black border-4 border-brand-orange shadow-[0_0_15px_rgba(255,94,0,0.8)] z-10"></div>
+                        </div>
+                        <div class="hidden sm:block sm:w-[45%] order-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 relative z-10 text-center text-gray-500 text-sm font-mono">
+        <p>© 2026 Aksh. Designed & Built with passion.</p>
+    </footer>
+
+    <!-- 7. Floating Back-to-Top Button -->
+    <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-2xl glass-panel border border-brand-orange/40 text-brand-orange hover:bg-gradient-to-r hover:from-brand-orange hover:to-brand-red hover:text-white shadow-xl shadow-brand-orange/20 flex items-center justify-center opacity-0 translate-y-6 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <!-- 5. Project Case Study / Quick-View Modal -->
+    <div id="projectModal" onclick="if(event.target === this) closeProjectModal()" class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="modal-content glass-panel max-w-2xl w-full rounded-3xl overflow-hidden border-white/15 relative shadow-2xl">
+            <button onclick="closeProjectModal()" aria-label="Close Project Modal" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-xl bg-black/60 hover:bg-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="relative aspect-video w-full overflow-hidden bg-brand-dark">
+                <img id="pmImage" src="" alt="Project Preview" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-card via-brand-card/30 to-transparent"></div>
+                <span id="pmBadge" class="absolute bottom-4 left-6 px-3 py-1 rounded-full text-xs font-mono glass-panel text-brand-orange border-brand-orange/40"></span>
+            </div>
+
+            <div class="p-6 sm:p-8">
+                <h3 id="pmTitle" class="text-2xl sm:text-3xl font-bold text-white mb-2"></h3>
+                <p id="pmSummary" class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6"></p>
+
+                <div class="mb-6">
+                    <h4 class="text-xs font-mono uppercase tracking-wider text-brand-orange mb-3">// Key Highlights & Architecture</h4>
+                    <ul id="pmHighlights" class="space-y-2 text-sm text-gray-300"></ul>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-white/10">
+                    <div id="pmTags" class="flex flex-wrap gap-2"></div>
+                    <a id="pmLiveLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-ripple inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-brand-orange to-brand-red hover:shadow-lg hover:shadow-brand-orange/30 transition-all">
+                        <span>Launch Project</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal with Smooth Fade & Scale Transition -->
+    <div id="contactModal" onclick="if(event.target === this) closeContactModal()" class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="modal-content glass-panel max-w-md w-full rounded-3xl p-8 border-white/10 relative shadow-2xl">
+            <button onclick="closeContactModal()" aria-label="Close Contact Modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-white mb-1">Let's Connect</h3>
+            <p class="text-xs font-mono text-brand-orange mb-4">Contact with me: <a href="mailto:2211akshmittal@gmail.com" class="underline hover:text-white">2211akshmittal@gmail.com</a></p>
+            <p class="text-gray-400 text-sm mb-6">Send me a message and it will go directly to my email inbox!</p>
+            
+            <!-- Live FormSubmit Action sending emails to 2211akshmittal@gmail.com -->
+            <form action="https://formsubmit.co/2211akshmittal@gmail.com" method="POST" class="space-y-4">
+                <input type="hidden" name="_subject" value="New Portfolio Message from Felix.AI!">
+                <input type="text" name="name" placeholder="Your Name" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-orange transition-colors">
+                <input type="email" name="email" placeholder="Your Email" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-orange transition-colors">
+                <textarea name="message" rows="4" placeholder="Your Message" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-orange transition-colors"></textarea>
+                <button type="submit" class="btn-ripple w-full py-3.5 rounded-xl font-medium text-white bg-gradient-to-r from-brand-orange to-brand-red hover:shadow-lg hover:shadow-brand-orange/30 transition-all">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // ==========================================
+        // 1. Mobile Menu Smooth Accordion Toggle
+        // ==========================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIconOpen = document.getElementById('menuIconOpen');
+        const menuIconClose = document.getElementById('menuIconClose');
+        let isMobileMenuOpen = false;
+
+        function toggleMobileMenu(forceState) {
+            isMobileMenuOpen = typeof forceState === 'boolean' ? forceState : !isMobileMenuOpen;
+            if (isMobileMenuOpen) {
+                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100');
+                menuIconOpen.classList.add('hidden');
+                menuIconClose.classList.remove('hidden');
+            } else {
+                mobileMenu.style.maxHeight = '0px';
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', () => toggleMobileMenu());
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => toggleMobileMenu(false));
+        });
+
+        // ==========================================
+        // 2. Smooth Animated Modals (Contact & Project)
+        // ==========================================
+        function openContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Project Case Study Data
+        const projectData = {
+            'felix-ai': {
+                title: 'Felix Ai',
+                badge: 'Node.js & Web3',
+                image: 'https://lh3.googleusercontent.com/u/0/d/1cNOOP6-YLLYNLJaJdMHD8AreXUK6RR-w',
+                summary: 'A thoughtful AI companion crafted for deep brainstorming, problem-solving, and everyday productivity. Built with a responsive glassmorphic interface and real-time conversational memory.',
+                highlights: [
+                    'Context-aware multi-turn dialogue engine for structured ideation.',
+                    'Clean, distraction-free dark UI with responsive mobile & desktop ergonomics.',
+                    'Fast cloud deployment engineered for low-latency responses.'
+                ],
+                tags: ['#React', '#Tailwind', '#Node', '#AI'],
+                link: 'https://2211felix.pythonanywhere.com'
+            },
+            'github-profile': {
+                title: 'Github Profile',
+                badge: 'Open Source Hub',
+                image: 'https://lh3.googleusercontent.com/u/0/d/1GkfQX2lQnSJNi90n-xctzqwSBAgJjwdt',
+                summary: 'Central open-source portfolio housing full-stack experiments, UI utilities, and continuous developer contributions across modern JavaScript and Python ecosystems.',
+                highlights: [
+                    'Active repositories featuring clean architecture and modular documentation.',
+                    'Full-stack boilerplates, API integrations, and frontend micro-interaction demos.',
+                    'Continuous commit history reflecting rapid prototyping and iteration.'
+                ],
+                tags: ['#GitHub', '#OpenSource', '#DeveloperTools'],
+                link: 'https://github.com/2211akshmittal-del'
+            },
+            'felix-os': {
+                title: 'Felix // OS',
+                badge: 'Python & Vue',
+                image: 'https://lh3.googleusercontent.com/u/0/d/1w7nk-ngpRebrmBJIV19VHX7AA6ywFKLi',
+                summary: 'An AI-powered operating workspace combining smart document indexing, instant executive summary generation, and natural language querying in one unified interface.',
+                highlights: [
+                    'Powered by Vue 3, FastAPI, and Gemini AI for rapid document comprehension.',
+                    'Automated knowledge extraction and structured note synthesis.',
+                    'Sleek OS-inspired modular panels designed for deep focus.'
+                ],
+                tags: ['#Vue3', '#FastAPI', '#Gemini'],
+                link: 'https://felix-os-one.vercel.app/'
+            }
+        };
+
+        function openProjectModal(projectId) {
+            const data = projectData[projectId];
+            if (!data) return;
+
+            document.getElementById('pmImage').src = data.image;
+            document.getElementById('pmBadge').textContent = data.badge;
+            document.getElementById('pmTitle').textContent = data.title;
+            document.getElementById('pmSummary').textContent = data.summary;
+            document.getElementById('pmLiveLink').href = data.link;
+
+            const highlightsEl = document.getElementById('pmHighlights');
+            highlightsEl.innerHTML = data.highlights.map(item => `
+                <li class="flex items-start gap-2.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-orange mt-2 shrink-0"></span>
+                    <span>${item}</span>
+                </li>
+            `).join('');
+
+            const tagsEl = document.getElementById('pmTags');
+            tagsEl.innerHTML = data.tags.map(tag => `
+                <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-gray-300">${tag}</span>
+            `).join('');
+
+            const modal = document.getElementById('projectModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Escape key closes modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeContactModal();
+                closeProjectModal();
+                if (isMobileMenuOpen) toggleMobileMenu(false);
+            }
+        });
+
+        // ==========================================
+        // 3. Dynamic Role Typing Effect in Hero
+        // ==========================================
+        const roles = [
+            "Full-Stack Developer",
+            "UI/UX Architect",
+            "AI Product Builder",
+            "Creative Technologist"
+        ];
+        const typedRoleEl = document.getElementById('typedRole');
+        let roleIndex = 0;
+        let charIndex = roles[0].length;
+        let isDeleting = true;
+
+        function typeRoleLoop() {
+            const currentRole = roles[roleIndex];
+            if (isDeleting) {
+                charIndex--;
+                typedRoleEl.textContent = currentRole.substring(0, charIndex);
+            } else {
+                charIndex++;
+                typedRoleEl.textContent = currentRole.substring(0, charIndex);
+            }
+
+            let delay = isDeleting ? 45 : 85;
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                delay = 2000; // Pause on full word
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                delay = 350;
+            }
+
+            setTimeout(typeRoleLoop, delay);
+        }
+        setTimeout(typeRoleLoop, 2200);
+
+        // ==========================================
+        // 4. Scroll Progress Bar, Back-to-Top, Navbar & Timeline Line
+        // ==========================================
+        const scrollProgressBar = document.getElementById('scrollProgressBar');
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        const mainHeader = document.getElementById('mainHeader');
+        const timelineContainer = document.getElementById('timelineContainer');
+        const timelineProgressLine = document.getElementById('timelineProgressLine');
+
+        function handleScroll() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            scrollProgressBar.style.width = scrollPercent + '%';
+
+            // Header compact padding on scroll
+            if (scrollTop > 40) {
+                mainHeader.classList.remove('py-4');
+                mainHeader.classList.add('py-2.5');
+            } else {
+                mainHeader.classList.add('py-4');
+                mainHeader.classList.remove('py-2.5');
+            }
+
+            // Back to Top Button visibility
+            if (scrollTop > 450) {
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-6', 'pointer-events-none');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'translate-y-6', 'pointer-events-none');
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+            }
+
+            // Experience Timeline vertical line fill
+            if (timelineContainer && timelineProgressLine) {
+                const rect = timelineContainer.getBoundingClientRect();
+                const windowCenter = window.innerHeight * 0.65;
+                const progress = Math.min(Math.max((windowCenter - rect.top) / rect.height, 0), 1);
+                timelineProgressLine.style.height = (progress * 100) + '%';
+            }
+        }
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+
+        // Expandable Timeline Cards
+        function toggleTimelineCard(card) {
+            const extra = card.querySelector('.timeline-extra');
+            const chevron = card.querySelector('.timeline-chevron');
+            if (!extra) return;
+
+            const isOpen = extra.style.maxHeight && extra.style.maxHeight !== '0px';
+            if (isOpen) {
+                extra.style.maxHeight = '0px';
+                extra.classList.add('opacity-0');
+                extra.classList.remove('opacity-100');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            } else {
+                extra.style.maxHeight = extra.scrollHeight + 'px';
+                extra.classList.remove('opacity-0');
+                extra.classList.add('opacity-100');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // ==========================================
+        // 5. IntersectionObserver: Scroll Reveals & Skill Bars
+        // ==========================================
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+
+                    // Animate skill bars when skill container enters viewport
+                    if (entry.target.id === 'skillBarsContainer') {
+                        entry.target.querySelectorAll('.skill-fill').forEach((bar, idx) => {
+                            setTimeout(() => {
+                                bar.style.width = bar.getAttribute('data-width');
+                            }, idx * 120);
+                        });
+                    }
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.14 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ==========================================
+        // 6. Project Category Filtering with Smooth Transitions
+        // ==========================================
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const filter = tab.getAttribute('data-filter');
+
+                // Update active tab styling
+                filterTabs.forEach(t => {
+                    t.classList.remove('active', 'bg-gradient-to-r', 'from-brand-orange', 'to-brand-red', 'text-white', 'shadow-lg', 'shadow-brand-orange/25');
+                    t.classList.add('glass-panel', 'text-gray-300');
+                });
+                tab.classList.add('active', 'bg-gradient-to-r', 'from-brand-orange', 'to-brand-red', 'text-white', 'shadow-lg', 'shadow-brand-orange/25');
+                tab.classList.remove('glass-panel', 'text-gray-300');
+
+                // Animate cards out then filter
+                projectCards.forEach(card => {
+                    const categories = card.getAttribute('data-category').split(' ');
+                    const matches = filter === 'all' || categories.includes(filter);
+
+                    card.classList.add('filtering-out');
+                    setTimeout(() => {
+                        if (matches) {
+                            card.classList.remove('hidden');
+                            requestAnimationFrame(() => {
+                                card.classList.remove('filtering-out');
+                            });
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    }, 220);
+                });
+            });
+        });
+
+        // ==========================================
+        // 7. 3D Tilt Hover, Mouse Radial Spotlight, Cursor Glow & Button Ripples
+        // ==========================================
+        const cursorGlow = document.getElementById('cursorGlow');
+        let cursorVisible = false;
+
+        document.addEventListener('mousemove', (e) => {
+            if (cursorGlow && window.innerWidth >= 1024) {
+                if (!cursorVisible) {
+                    cursorGlow.classList.remove('opacity-0');
+                    cursorVisible = true;
+                }
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }
+        });
+
+        // Spotlight & subtle 3D tilt on cards
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                if (card.classList.contains('tilt-card') && window.innerWidth >= 768) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -4;
+                    const rotateY = ((x - centerX) / centerX) * 4;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                if (card.classList.contains('tilt-card')) {
+                    card.style.transform = '';
+                }
+            });
+        });
+
+        // Ripple click effect on buttons
+        document.querySelectorAll('.btn-ripple').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const rect = this.getBoundingClientRect();
+                const circle = document.createElement('span');
+                const diameter = Math.max(rect.width, rect.height);
+                const radius = diameter / 2;
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${e.clientX - rect.left - radius}px`;
+                circle.style.top = `${e.clientY - rect.top - radius}px`;
+                circle.classList.add('ripple-circle');
+
+                const existingRipple = this.querySelector('.ripple-circle');
+                if (existingRipple) existingRipple.remove();
+
+                this.appendChild(circle);
+            });
+        });
+    </script>
+</body>
+</html>
